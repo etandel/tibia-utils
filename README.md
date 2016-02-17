@@ -1,12 +1,12 @@
 About
 ---
 
-Fun utils for playing [Tibia](https://tibia.com).
+Stuff about [Tibia](https://tibia.com).
 
 
 Content
 ---
 
-travel: Utils for traveling between ciites
-    - travel.py: finds cheapest path between two cites.
+- travel: Utils for traveling in Tibia
+  - travel.py: finds cheapest path between two towns.
 
