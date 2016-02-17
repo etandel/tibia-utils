@@ -1,10 +1,13 @@
+import os
+import argparse
 import sys
 
 import numpy as np
 from pandas import DataFrame, Series
 
 
-PRICES = DataFrame.from_csv('prices.csv').T.astype(float)
+prices_file = os.path.join(os.path.dirname(__file__), 'prices.csv')
+PRICES = DataFrame.from_csv(prices_file).T.astype(float)
 
 
 def memoize(f):
@@ -50,6 +53,7 @@ def rebuild_path(prev, from_, to):
 
 
 def get_path(from_, to):
+    # dijkstra!
     cities = PRICES.index
     costs = Series(index=cities).fillna(np.inf)
     costs[from_] = 0
@@ -74,16 +78,22 @@ def get_path(from_, to):
     return rebuild_path(prev, from_, to), costs[to]
 
 
-def main():
-    from_ = get_correct_city(sys.argv[1])
-    to = get_correct_city(sys.argv[2])
+def main(args):
+    from_ = get_correct_city(args.start)
+    to = get_correct_city(args.finish)
 
     path, cost = get_path(from_, to)
-    print('Path from {} to {} ({} gp):'.format(from_, to, cost))
+    print('Path from {} to {} ({} gold):'.format(from_, to, cost))
     print(' -> '.join(path))
 
 
+def parse_args():
+    parser = argparse.ArgumentParser('Find the cheapest path between two towns')
+    parser.add_argument('start')
+    parser.add_argument('finish')
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
-    main()
+    main(parse_args())
 
